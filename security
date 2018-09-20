@@ -38,17 +38,19 @@ void setup()
 	pinMode(echoPin, INPUT);
 	pinMode(greenLED, OUTPUT);
 	pinMode(redLED, OUTPUT);
-}
-
-
-void loop() 
-{
+	
 	//lights initialized
 	digitalWrite(greenLED, HIGH);
 	digitalWrite(redLED, LOW);
 	
 	//buzzer initialized
 	digitalWrite(buzzer, LOW);
+}
+
+
+void loop() 
+{
+	
 
 	//ultrasonic sensor initialized
 	digitalWrite(trigPin, LOW);
@@ -62,7 +64,7 @@ void loop()
 	duration = pulseIn(echoPin, HIGH); //reads high pulse on pin
 
 	//calculate the distance (in cm) based on the speed of sound
-	distance = duration*0.034/2
+	distance = duration * 0.034 / 2;
 
 	//display reading in serial monitor
 	Serial.println(distance);
