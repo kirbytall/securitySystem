@@ -71,16 +71,29 @@ void loop()
 
 	delay(50);
 
-
+	//SIMON LOOK HERE!!! should I do if/else loops or something like this?
+	//long range gets green light
 	while (distance > 150)
 		digitalWrite(greenLED, HIGH);
 		digitalWrite(redLED, LOW);
+		delay(10);
+		break;
 
-	while (distance <= 150)
+	//medium range gets red light
+	while (50 <= distance <= 150)
 		digitalWrite(greenLED, LOW);
 		digitalWrite(redLED, HIGH);
+		delay(10);
+		break;
 
-
+	//short range gets red light and buzzer	
+	while (distance < 50)
+		digitalWrite(greenLED, LOW);
+		digitalWrite(redLED, HIGH);
+		// generates a 400Hz tone in output pin 2 with 2000ms of duration 
+		tone(buzzer, 400, 2000);
+		delay(10);
+		break;
 
 
 	
