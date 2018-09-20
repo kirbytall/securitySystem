@@ -1,0 +1,83 @@
+/*
+ Name:		securitySystem.ino
+ Created:	9/19/2018 3:38:55 PM
+ Author:	Kirby
+*/
+
+/*
+The purpose of this program is to run an arduino based security system.  
+At this point it is just to test concepts.  
+An ultrasonic buzzer is hooked up to a breadboard along with a passive buzzer and two LED's which are red and green.
+Under normal circumstances, the green light will be on along with the ultrasonic sensor.
+Should the sensor determine that an object is within a certain proximity, the light switches from red to green.
+If it gets even closer, past a second predetermined point, the red light remains on and the buzzer sounds.
+As you back away, the process is reversed, first switching the buzzer off followed by the light going from red to green.
+
+The order which the previous items are connected to the breadboard is arbitrary at this point.
+*/
+
+//initialize buzzer
+#define buzzer 2
+
+//initialize ultrasonic sensor
+#define trigPin 3
+#define echoPin 4
+
+//indicator lights
+const int greenLED = 5;
+const int redLED = 6;
+
+//used to calculate distance
+long duration, distance;
+
+void setup() 
+{
+	Serial.begin(9600);
+	pinMode(buzzer, OUTPUT);
+	pinMode(trigPin, OUTPUT);
+	pinMode(echoPin, OUTPUT);
+	pinMode(greenLED, OUTPUT);
+	pinMode(redLED, OUTPUT);
+}
+
+
+void loop() 
+{
+	//lights initialized
+	digitalWrite(greenLED, HIGH);
+	digitalWrite(redLED, LOW);
+	
+	//buzzer initialized
+	digitalWrite(buzzer, LOW);
+
+	//ultrasonic sensor initialized
+	digitalWrite(trigPin, LOW);
+	delayMicroseconds(2);
+
+	//ultrasonic distancing sequence
+	digitalWrite(trigPin, HIGH);
+	delayMicroseconds(10);
+
+	digitalWrite(trigPin, LOW);
+	duration = pulseIn(echoPin, HIGH); //reads high pulse on pin
+
+	//calculate the distance (in cm) based on the speed of sound
+	distance = duration / 58.2;
+
+	//display reading in serial monitor
+	Serial.println(distance);
+
+	delay(50);
+
+
+
+
+
+
+	
+
+
+
+
+}
+
