@@ -72,6 +72,13 @@ void loop()
 	delay(50);
 
 
+	while (distance > 150)
+		digitalWrite(greenLED, HIGH);
+		digitalWrite(redLED, LOW);
+
+	while (distance <= 150)
+		digitalWrite(greenLED, LOW);
+		digitalWrite(redLED, HIGH);
 
 
 
