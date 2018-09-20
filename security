@@ -62,7 +62,7 @@ void loop()
 	duration = pulseIn(echoPin, HIGH); //reads high pulse on pin
 
 	//calculate the distance (in cm) based on the speed of sound
-	distance = duration / 58.2;
+	distance = duration*0.034/2
 
 	//display reading in serial monitor
 	Serial.println(distance);
