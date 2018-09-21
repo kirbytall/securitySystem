@@ -1,13 +1,13 @@
 /*
- Name:		securitySystem.ino
- Created:	9/19/2018 3:38:55 PM
- Author:	Kirby
+Name:		securitySystem.ino
+Created:	9/19/2018 3:38:55 PM
+Author:	Kirby
 */
 
 /*
-The purpose of this program is to run an arduino based security system.  
-At this point it is just to test concepts.  
-An ultrasonic buzzer is hooked up to a breadboard along with a passive buzzer and two LED's which are red and green.
+The purpose of this program is to run an arduino based security system.
+At this point it is just to test concepts.
+An ultrasonic transciever is hooked up to a breadboard along with a passive buzzer and two LED's which are red and green.
 Under normal circumstances, the green light will be on along with the ultrasonic sensor.
 Should the sensor determine that an object is within a certain proximity, the light switches from red to green.
 If it gets even closer, past a second predetermined point, the red light remains on and the buzzer sounds.
@@ -16,90 +16,75 @@ As you back away, the process is reversed, first switching the buzzer off follow
 The order which the previous items are connected to the breadboard is arbitrary at this point.
 */
 
-//initialize buzzer
+//buzzer pin connection
 #define buzzer 2
 
-//initialize ultrasonic sensor
-#define trigPin 3
-#define echoPin 4
+//ultrasonic sensor pin connections
+#define trigPin 3	//trigPin is the "transmission" pin
+#define echoPin 4	//echoPin is the "reception" pin
 
 //indicator lights
 const int greenLED = 5;
 const int redLED = 6;
 
 //used to calculate distance
-long duration, distance;
+float duration;
+float distance;
 
-void setup() 
+void setup()
 {
 	Serial.begin(9600);
+	Serial.println("SECURITY SYSTEM");
+	Serial.println("initializing...");
+
+	//Setting the pin modes
 	pinMode(buzzer, OUTPUT);
 	pinMode(trigPin, OUTPUT);
 	pinMode(echoPin, INPUT);
 	pinMode(greenLED, OUTPUT);
 	pinMode(redLED, OUTPUT);
-	
-	//lights initialized
+
+	//initializing the ultrasonic module (transmission "OFF")
+	digitalWrite(trigPin, LOW);
+
+	//initializing the LEDs (Green LED ON, Red LED Off)
 	digitalWrite(greenLED, HIGH);
 	digitalWrite(redLED, LOW);
-	
-	//buzzer initialized
+
+	//initializing the buzzer (OFF)
 	digitalWrite(buzzer, LOW);
+
+	delay(1000);
+	Serial.println("Setup Completed");
 }
 
 
-void loop() 
+void loop()
 {
-	
+	//tranmitting the ultrasonic pulses
+	transmitPulse();
 
-	//ultrasonic sensor initialized
-	digitalWrite(trigPin, LOW);
-	delayMicroseconds(2);
-
-	//ultrasonic distancing sequence
-	digitalWrite(trigPin, HIGH);
-	delayMicroseconds(10);
-
-	digitalWrite(trigPin, LOW);
-	duration = pulseIn(echoPin, HIGH); //reads high pulse on pin
+	//measuring the return pulse
+	duration = pulseIn(echoPin, HIGH);
 
 	//calculate the distance (in cm) based on the speed of sound
-	distance = duration * 0.034 / 2;
+	distance = duration * 0.0343 / 2;
 
 	//display reading in serial monitor
-	Serial.println(distance);
+	Serial.println(String(distance) + " cm");
 
 	delay(50);
+}
 
-	//SIMON LOOK HERE!!! should I do if/else loops or something like this?
-	//long range gets green light
-	while (distance > 150)
-		digitalWrite(greenLED, HIGH);
-		digitalWrite(redLED, LOW);
-		delay(10);
-		break;
-
-	//medium range gets red light
-	while (50 <= distance <= 150)
-		digitalWrite(greenLED, LOW);
-		digitalWrite(redLED, HIGH);
-		delay(10);
-		break;
-
-	//short range gets red light and buzzer	
-	while (distance < 50)
-		digitalWrite(greenLED, LOW);
-		digitalWrite(redLED, HIGH);
-		// generates a 400Hz tone in output pin 2 with 2000ms of duration 
-		tone(buzzer, 400, 2000);
-		delay(10);
-		break;
-
-
-	
-
-
-
-
+void transmitPulse()
+{
+	//making sure that the trigPin is Off before we start transmitting.
+	digitalWrite(trigPin, LOW);
+	delayMicroseconds(2);
+	//transmitting a pulse for 10 microseconds
+	digitalWrite(trigPin, HIGH);
+	delayMicroseconds(10);
+	//turn off the transmitter
+	digitalWrite(trigPin, LOW);
 }
 
