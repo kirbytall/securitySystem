@@ -67,11 +67,13 @@ void loop()
 	Serial.println(String(distance) + " cm");
 	delay(50);
 	
-	// read the sensor:
-	int sensorReading = echoPin 4;
+	//define the minimum / maximum value of the ultrasonic sensor for mapping purpose
+	float distanceMin;	//add " = what ever min value"
+	float distanceMax;	//add   = what ever max value"
+	
 
 	// map the sensor range to a range of four options:
-	int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
+	int range = map(distance, distanceMin, distanceMax, 0, 3);
 
 	// do something different depending on the range value:
 	switch (range) 
